@@ -45,6 +45,7 @@
                         <table id="products-table" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Name</th>
                                     <th>Barcode</th>
                                     <th>Quantity</th>
@@ -55,6 +56,7 @@
                             <tbody>
                                 @foreach ($products as $product)
                                     <tr>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $product->productTitle }}</td>
                                         <td>{{ $product->productBarcode }}</td>
                                         <td>{{ $product->quantity }}</td>

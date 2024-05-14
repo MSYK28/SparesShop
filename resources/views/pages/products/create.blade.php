@@ -26,7 +26,7 @@
                         <p>Complete Form to add a new product</p>
                     </div>
 
-                    <form action="" id="product-form" method="POST">
+                    <form action="" id="product-form">
                         @csrf
                         <div class="form-body mt-4">
                             <div class="card-body">
@@ -75,6 +75,7 @@
                                         <label for="" class="form-label">Discounted Price</label>
                                         <input type="text" class="form-control" name="productDiscountedPrice"
                                             id="productDiscountedPrice">
+                                        <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                                     </div>
                                 </div>
                             </div>
@@ -82,6 +83,7 @@
 
                         <div class="card-footer m-3">
                             <button class="btn btn-md btn-info m-2">Save Draft</button>
+                            {{-- <button type="button" class="btn btn-md btn-success m-2" onclick="confirmAddProduct()">Add Product</button> --}}
                             <button class="btn btn-md btn-success m-2" type="submit">Save Product</button>
                         </div>
                     </form>
