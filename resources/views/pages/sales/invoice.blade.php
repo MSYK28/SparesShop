@@ -28,12 +28,12 @@
                         </p>
                     </div>
                     @if ($sale->status == 1)
-                        <form action="{{ route('sales.destroy', $sale->id) }}" method="POST">
+                        <form action="{{ route('sales.destroy', $sale->id) }}" method="POST" id="delete-draft">
                             @csrf
                             @method('DELETE')
                             <div class="d-flex align-content-center flex-wrap gap-2">
-                                <input type="hidden" name="sale_id" value="{{ $sale->id }}">
-                                <button class="btn btn-danger delete-order">Delete Order</button>
+                                <input type="hidden" name="sale_id" id="sale_id" value="{{ $sale->id }}">
+                                <button class="btn btn-danger delete-order">Delete Sale</button>
                             </div>
                         </form>
                     @endif
@@ -124,7 +124,7 @@
                                         <div class="col-12 col-md-7">
                                             <label class="form-label" for="customer_name">Phone Number</label>
                                             <input type="text" id="customer_name" name="customer_name"
-                                                class="form-control" readonly>
+                                                class="form-control" readonly required>
                                         </div>
                                         <div class="col-12 col-md-3">
                                             <label class="form-label" for="orders">0rders</label>
@@ -163,7 +163,7 @@
                                 </div>
                             @endif
                             <div class="card-footer">
-                                <form id="addCustomerForm" class="row g-3" action="{{ route('sales.store') }}"
+                                <form id="completeSale" class="row g-3" action="{{ route('sales.store') }}"
                                     method="POST">
                                     @csrf
                                     @if ($sale->status == 1)

@@ -62,7 +62,7 @@
     </div>
 
 
-    {{-- Add Customer Modal --}}
+    {{-- Add Supplier Modal --}}
 
     <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-simple modal-edit-user">
@@ -73,7 +73,7 @@
                         <h3>Add New Supplier</h3>
                         <p>Adding supplier details will receive a privacy audit.</p>
                     </div>
-                    <form id="addCustomerForm" class="row g-3">
+                    <form id="addSupplierForm" class="row g-3">
                         @csrf
                         <div class="col-12 col-md-12 fv-plugins-icon-container">
                             <label class="form-label" for="name">Name</label>

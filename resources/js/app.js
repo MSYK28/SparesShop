@@ -48,7 +48,7 @@ $(document).ready(function () {
 // SUPPLIERS
 // ADDING SUPPLIERS
 $(document).ready(function () {
-    $('#addCustomerForm').on('submit', function (e) {
+    $('#addSupplierForm').on('submit', function (e) {
         e.preventDefault();
         Swal.fire({
             title: 'Are you sure?',
@@ -107,7 +107,7 @@ $(document).ready(function () {
             {
                 Swal.fire({
                     title: 'Cancelled',
-                    text: 'The product was not added.',
+                    text: 'The supplier was not added.',
                     icon: 'info',
                     confirmButtonText: 'OK'
                 });
@@ -320,6 +320,116 @@ $(document).ready(function () {
     });
 });
 
+// 
+// SAVE PURCHASE AS DRAFT
+$(document).ready(function () {
+    $('#sale-form').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will create a new sale.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, create sale!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) { 
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Sale has been created',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href ='/home';
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The sale was not created.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    })
+});
+// END SAVE PRODUCT AS DRAFT!!!
+
+// START DELETE DRAFTED SALE
+$(document).ready(function () {
+    $('#delete-draft').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will delete the order.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete order!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let sale_id = document.getElementById('sale_id');
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Order has been deleted.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href = "/sales/";
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The order was not deleted.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    })
+});
+// END DELETE DRAFTED SALE!!!
+
+
 // CART TOTAL
 $(document).ready(function () {
     $.ajax({
@@ -336,8 +446,6 @@ $(document).ready(function () {
 });
 
 
-
-
 // GET CUSTOMER DETAILS
 $('#customer_id').on('change', function () {
     var customer_id = $(this).val();
@@ -350,7 +458,6 @@ $('#customer_id').on('change', function () {
                 $('#customer_name').val(data.phone_number);
                 $('#customer_email').val(data.email);
                 $('#customer_sale_id').val(customer_id);
-                console.log(data);
                 // Add more fields as needed
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -366,10 +473,169 @@ $('#customer_id').on('change', function () {
 
 // COMPLETE SALE
 $(document).ready(function () {
-    $('#addCustomerSubmitButton').click(function () {
-        $('#addCustomerForm').submit();
+    $('#completeSale').on('submit', function (e){
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will complete the sale.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, complete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            // If the user confirms, send the AJAX request
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Sale has been completed.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href = "/sales/";
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+            else {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The sale was not completed.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
     });
 });
+// END COMPLETE SALE
+
+
+// ADD NEW CUSTOMER!!!
+$(document).ready(function () {
+    $('#addCustomerForm').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will add a new Customer to the database.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, add Customer!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let customerName = document.getElementById('name').value;
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: customerName + ' has been added.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href ='/customers';
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The Customer was not added.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    })
+});
+// ADD NEW CUSTOMER!!!
+
+
+// ADD DEBT PAYMENT
+$(document).ready(function () {
+    $('#PaymentForm').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will create a new transaction to the database.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, add transaction!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let customer_id =document.getElementById('customer_id').value;
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Transaction has been added.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href ='/customers/show-customer-details/'  + customer_id;
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The Customer was not added.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    })
+});
+// ADD DEBT PAYMENT !!!!
 
 // GET SUPPLIER PRODUCTS WHEN ABOUT TO ORDER
 $('#supplier_id').on('change', function () {

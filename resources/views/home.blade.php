@@ -84,7 +84,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <form action="{{ route('products.purchase') }}" method="POST">
+                                <form action="{{ route('products.purchase') }}" method="POST" id="sale-form">
                                     @csrf
                                     <tbody>
                                         @foreach ($cart as $item)
@@ -111,6 +111,7 @@
                                             <td colspan="3">Subtotal</td>
                                             <td colspan="1">{{ number_format($total, 2) }}</td>
                                             <td colspan="1">
+                                            <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                                                 <button type="submit" class="btn btn-success complete-purchase"
                                                     id="complete-purchase">Complete</button>
                                             </td>

@@ -153,7 +153,7 @@
                         <h3>Add Payment</h3>
                         <p>Adding details to make payment.</p>
                     </div>
-                    <form id="addCustomerForm" class="row g-3" action="{{ route('customers.transactions') }}"
+                    <form id="PaymentForm" class="row g-3" action="{{ route('customers.transactions') }}"
                         method="POST">
                         @csrf
                         <div class="col-12 col-md-12 fv-plugins-icon-container">
@@ -165,12 +165,12 @@
                         <div class="col-12 col-md-6">
                             <label class="form-label" for="mpesa_code">Mpesa Code</label>
                             <input type="text" id="mpesa_code" name="mpesa_code" class="form-control"
-                                placeholder="example@domain.com">
+                                placeholder="PSHFH293">
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label" for="amount">Amount</label>
                             <input type="text" id="amount" name="amount" class="form-control modal-edit-tax-id"
-                                placeholder="123 456 7890">
+                                placeholder="1000">
                         </div>
                         <div class="col-12 text-center mt-3">
                             <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal"
