@@ -26,7 +26,7 @@
                             <div class="form-group">
                                 <label for="file" class="form-label">Import Excel</label>
                                 <input type="file" name="file" class="form-control-file form-control" id="file"
-                                    accept=".xlsx,.xls">
+                                    accept=".xlsx,.xls" required>
                             </div>
                             <button type="submit" class="btn btn-sm btn-primary mt-2">Import Products</button>
                         </form>
@@ -34,7 +34,7 @@
                             @csrf
                             <div class="form-group">
                                 <label for="file" class="form-label">Import CSV</label>
-                                <input type="file" name="file" class="form-control-file form-control" id="file">
+                                <input type="file" name="file" class="form-control-file form-control" id="file" required>
                             </div>
                             <button type="submit" class="btn btn-sm btn-primary mt-2">Import Products</button>
                         </form>

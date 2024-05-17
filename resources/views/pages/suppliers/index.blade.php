@@ -73,7 +73,7 @@
                         <h3>Add New Supplier</h3>
                         <p>Adding supplier details will receive a privacy audit.</p>
                     </div>
-                    <form id="addCustomerForm" class="row g-3" action="{{ route('suppliers.store') }}" method="POST">
+                    <form id="addCustomerForm" class="row g-3">
                         @csrf
                         <div class="col-12 col-md-12 fv-plugins-icon-container">
                             <label class="form-label" for="name">Name</label>
@@ -108,17 +108,18 @@
                         <div class="col-12 col-md-12 fv-plugins-icon-container">
                             <label class="form-label" for="bank_name">Bank Account Name</label>
                             <input type="text" id="bank_name" name="bank_name" class="form-control"
-                                placeholder="John Doe">
+                                placeholder="This Bank Account">
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label" for="bank">Bank</label>
                             <input type="text" id="bank" name="bank" class="form-control"
-                                placeholder="example@domain.com">
+                                placeholder="ABC Bank">
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label" for="bank_account">Bank Account Number</label>
                             <input type="text" id="bank_account" name="bank_account" class="form-control"
-                                placeholder="example@domain.com">
+                                placeholder="1111 2222 3333 4444">
+                            <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                         </div>
                         <div class="col-12 text-center mt-3">
                             <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal"

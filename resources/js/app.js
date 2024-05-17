@@ -4,6 +4,7 @@ import {
 import './bootstrap';
 import Swal from 'sweetalert2';
 
+// NAVBAR ACTIVE LINK
 $(document).ready(function () {
     $('.active-link').each(function () {
         if ($(this).attr('href') === window.location.pathname) {
@@ -44,27 +45,78 @@ $(document).ready(function () {
     });
 });
 
+// SUPPLIERS
+// ADDING SUPPLIERS
+$(document).ready(function () {
+    $('#addCustomerForm').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will add a new supplier to the database.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, add supplier!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let name = document.getElementById('name').value;
+                let email = document.getElementById('email').value;
+                let status = document.getElementById('status').value;
+                let taxID = document.getElementById('taxID').value;
+                let phone_number = document.getElementById('phone_number').value;
+                let bank_name = document.getElementById('bank_name').value;
+                let bank = document.getElementById('bank').value;
+                let bank_account = document.getElementById('bank_account').value;
 
-// CREATE NEW PRODUCT
-// $(document).ready(function () {
-//     $('#product-form').on('submit', function (e) {
-//         e.preventDefault();
-//         $.ajax({
-//             url: "/products",
-//             method: "POST",
-//             data: $(this).serialize(),
-//             success: function (response) {
-//                 console.log(response);
-//                 window.location.href = '/products';
-//                 alert('product added successfully');
-//             },
-//             error: function (xhr, status, error) {
-//                 console.log(xhr.responseJSON.errors);
-//             }
-//         });
-//     });
-// });
+                $.ajax({
+                    url: "/suppliers",
+                    type: "POST",
+                    data: {
+                        _token: $('#token').val(),
+                        name: name,
+                        email: email,
+                        status: status,
+                        taxID: taxID,
+                        phone_number: phone_number,
+                        bank_name: bank_name,
+                        bank: bank,
+                        bank_account: bank_account,
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: name + ' has been added.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href ='/suppliers';
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The product was not added.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    })
+});
 
+// ADDING PRODUCT TO PRODUCTS LIST
 $(document).ready(function () {
     $('#product-form').on('submit', function (e) {
         e.preventDefault();
@@ -140,17 +192,44 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#product-edit-form').on('submit', function (e) {
         e.preventDefault();
-        $.ajax({
-            url: "/products/" + $('#productId').val(),
-            method: "PUT",
-            data: $(this).serialize(),
-            success: function (response) {
-                console.log(response);
-                window.location.href = '/products';
-                alert('product updated successfully');
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseJSON.errors);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will edit the product in the database.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, edit it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            // If the user confirms, send the AJAX request
+            if (result.isConfirmed) {
+                let productTitle = document.getElementById('productTitle').value;
+
+                $.ajax({
+                    url: "/products/" + $('#productId').val(),
+                    method: "PUT",
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        window.location.href = '/products';
+                        Swal.fire({
+                            title: 'Success!',
+                            text: productTitle + ' has been updated.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseJSON.errors);
+                    }
+                });
+            }
+            else {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The product was not edited.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
             }
         });
     });
@@ -165,9 +244,14 @@ $(document).ready(function () {
             method: $(this).attr('method'),
             data: $(this).serialize(),
             success: function (response) {
-                console.log(response);
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Added to cart.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
                 window.location.href = '/home';
-                alert('Added to cart');
+                // alert('Added to cart');
                 // Show a success message or update the cart count
             },
             error: function (xhr, status, error) {
@@ -202,19 +286,37 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#empty-cart-form').on('submit', function (e) {
         e.preventDefault();
-        $.ajax({
-            url: $(this).attr('action'),
-            method: $(this).attr('method'),
-            data: $(this).serialize(),
-            success: function (response) {
-                window.location.href = '/home';
-                alert('Cart emptied');
-                // Reload the cart page or update the cart count
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseJSON.errors);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will empty the cart.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, empty cart!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        window.location.href = '/home';
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Cart has been emptied.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseJSON.errors);
+                    }
+                });
             }
-        });
+        })
     });
 });
 
@@ -232,6 +334,8 @@ $(document).ready(function () {
         }
     });
 });
+
+
 
 
 // GET CUSTOMER DETAILS
@@ -300,13 +404,22 @@ $(document).ready(function () {
             method: $(this).attr('method'),
             data: $(this).serialize(),
             success: function (response) {
-                console.log(response);
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Product has been added.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
                 window.location.href = '/orders/create-order/' + supplier_id;
-                alert('Added to Basket');
-                // Show a success message or update the cart count
             },
             error: function (xhr, status, error) {
-                console.log(xhr.responseJSON.errors);
+                // Display an error message
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred: ' + xhr.responseText,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
         });
     });
