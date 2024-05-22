@@ -28,12 +28,12 @@
                         <table id="products-table" class="table table-responsive table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Tax ID</th>
-                                    <th>Phone Number</th>
-                                    <th>Action</th>
+                                    <th style="width: 30px;">#</th>
+                                    <th style="width: 240px;">Name</th>
+                                    <th style="width: 160px;">Email</th>
+                                    <th style="width: 160px;">Tax ID</th>
+                                    <th style="width: 160px;">Phone Number</th>
+                                    <th style="width: 80px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

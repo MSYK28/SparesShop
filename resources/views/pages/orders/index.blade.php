@@ -6,13 +6,13 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-transparent mb-1 pb-1 pt-1 px-0 me-sm-6 me-5">
                     <li class="breadcrumb-item text-sm">
-                        <a class="opacity-5 text-dark" href="javascript:;">Sales</a>
+                        <a class="opacity-5 text-dark" href="javascript:;">Orders</a>
                     </li>
                     <li class="breadcrumb-item text-sm text-dark active text-capitalize" aria-current="page">
-                        Sales List
+                        Orders List
                     </li>
                 </ol>
-                <h6 class="font-weight-bolder mb-0 text-capitalize">List of current Sales</h6>
+                <h6 class="font-weight-bolder mb-0 text-capitalize">List of current Orders</h6>
             </nav>
         </div>
 
@@ -21,21 +21,24 @@
                 <div class="card ms-5">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Orders List</h5>
+                        <a href="{{ route('orders.create') }}" class="btn btn-sm m-2 btn-primary">New Order</a>
                     </div>
                     <div class="card-body">
                         <table id="products-table" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Supplier</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
+                                    <th style="width: 30;">#</th>
+                                    <th style="width: 300px;">Order ID</th>
+                                    <th style="width: 200px;">Supplier</th>
+                                    <th style="width: 100px;">Total</th>
+                                    <th style="width: 100px;">Status</th>
+                                    <th style="width: 100px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($orders as $order)
                                     <tr>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $order->orderCode }}</td>
                                         <td>{{ $order->suppliers->name }}</td>
                                         <td>{{ number_format($order->total, 2) }}</td>

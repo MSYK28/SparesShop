@@ -6,6 +6,7 @@ use App\Models\Customers;
 use App\Models\Products;
 use App\Models\Sales;
 use App\Models\SalesDetails;
+use App\Models\SalesRevenue;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -53,6 +54,13 @@ class SalesController extends Controller
         $store_sale->saleType = $request->saleType;
         $store_sale->status = 2;
         $store_sale->update();
+
+        $revenue = SalesRevenue::where('sale_id', $id)->get();
+        foreach ($revenue as $rev) {
+            $rev->update(['saleType' => $request->saleType]);
+        }
+        // dd($revenue);
+
         return redirect()->route('sales.index');
     }
 

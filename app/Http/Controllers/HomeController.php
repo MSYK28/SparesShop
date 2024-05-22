@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use App\Models\Sales;
 use App\Models\SalesDetails;
+use App\Models\SalesRevenue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -41,23 +42,33 @@ class HomeController extends Controller
     public function addToCart(Request $request)
     {
         $productId = $request->input('productId');
+        $product_quantity = Products::where('id', $productId)->first();
         $quantity = $request->input('quantity');
-        $price = $request->input('price');
-        $cart = session()->get('cart', []);
 
-        if (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] += $quantity;
-        } else {
-            $product = Products::find($productId);
-            $cart[$productId] = [
-                'id' => $productId,
-                'name' => $product->productTitle,
-                'quantity' => $quantity,
-                'price' => $price,
-            ];
+
+        if ($product_quantity->quantity > $quantity) {
+            # code...
+            $price = $request->input('price');
+            $cart = session()->get('cart', []);
+    
+            if (isset($cart[$productId])) {
+                $cart[$productId]['quantity'] += $quantity;
+            } else {
+                $product = Products::find($productId);
+                $cart[$productId] = [
+                    'id' => $productId,
+                    'name' => $product->productTitle,
+                    'quantity' => $quantity,
+                    'price' => $price,
+                ];
+            }
+            session()->put('cart', $cart);
+            return redirect()->back();
         }
-        session()->put('cart', $cart);
-        return redirect()->back();
+        else
+        {
+            return redirect()->back()->with('error', 'Sorry, item is out of stock');
+        }
     }
 
     public function viewCart()
@@ -66,15 +77,14 @@ class HomeController extends Controller
         return view('home', compact('cart'));
     }
 
-    public function removeFromCart($id)
+    public function removeFromCart($id, Request $request)
     {
         $cart = session()->get('cart', []);
         if (isset($cart[$id])) {
             unset($cart[$id]);
             session()->put('cart', $cart);
         }
-
-        return redirect()->back();
+        return redirect()->route('home.index');
     }
 
     public function emptyCart()
@@ -124,6 +134,14 @@ class HomeController extends Controller
             $sale_detail->price = $item['price'];
             $sale_detail->total = $item['quantity'] * $item['price'];
             $sale_detail->save();
+            
+            $purchase = $item['quantity'] * $product['productBuyingPrice'];
+
+            $sale_revenue = new SalesRevenue();
+            $sale_revenue->sale_id = $sale_id;
+            $sale_revenue->product_id = $item['id'];;
+            $sale_revenue->amount = $sale_detail->total - $purchase;
+            $sale_revenue->save();
         }
         
         session()->forget('cart');

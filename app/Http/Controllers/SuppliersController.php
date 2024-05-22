@@ -59,8 +59,6 @@ class SuppliersController extends Controller
         $supplier->status = $request->status;
         $supplier->save();
 
-        // $suppliers = Suppliers::create($validatedData);
-
         return redirect()->back()->with('success', 'Supplier added successfully.');
     }
 
@@ -90,10 +88,15 @@ class SuppliersController extends Controller
         $new_transaction->amount = $request->amount;
         $new_transaction->save();
 
+        $supplier = Suppliers::find($request->supplier_id);
+        $orders = Orders::where('supplier_id', $request->supplier_id)->get();
+        $orders_count = $orders->count();
+        $accounts = SupplierAccounts::where('supplier_id', $request->supplier_id)->get();
+
         $total_amount = SupplierAccounts::where('supplier_id', $request->supplier_id)->where('transaction_type', 1)->sum('amount');
         $paid_amount = SupplierAccounts::where('supplier_id', $request->supplier_id)->where('transaction_type', 2)->sum('amount');
         $balance = $total_amount - $paid_amount;
-        return view('pages.suppliers.show', compact('supplier', 'orders', 'accounts', 'balance'));
+        return view('pages.suppliers.show', compact('orders', 'supplier', 'balance', 'accounts'));
 
     }
 

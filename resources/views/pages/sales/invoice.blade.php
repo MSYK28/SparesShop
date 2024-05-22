@@ -57,6 +57,7 @@
                                         id="DataTables_Table_0">
                                         <thead>
                                             <tr>
+                                                <th style="width: 40px;">#</th>
                                                 <th style="width: 254px;" aria-label="products">Products</th>
                                                 <th style="width: 144px;" aria-label="qty">Quantity</th>
                                                 <th style="width: 144px;" aria-label="price">Price</th>
@@ -66,6 +67,7 @@
                                         <tbody>
                                             @foreach ($show_sales as $show_sale)
                                                 <tr>
+                                                    <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $show_sale->products->productTitle }}</td>
                                                     <td>{{ $show_sale->quantity }}</td>
                                                     <td>{{ number_format($show_sale->price, 2) }}</td>
@@ -76,17 +78,17 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="2"></td>
+                                                <td colspan="3"></td>
                                                 <td>Subtotal</td>
                                                 <td>{{ number_format($subtotal, 2) }}</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"></td>
+                                                <td colspan="3"></td>
                                                 <td>VAT (16%)</td>
                                                 <td>{{ number_format($VAT, 2) }}</td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"></td>
+                                                <td colspan="3"></td>
                                                 <td>Total</td>
                                                 <td>{{ number_format($total, 2) }}</td>
                                             </tr>

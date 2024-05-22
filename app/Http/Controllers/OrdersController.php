@@ -32,7 +32,6 @@ class OrdersController extends Controller
         $supplier = Suppliers::find($id);
         $products = Products::where('supplier', $id)->get();
         $basket = session()->get('basket', []);
-        // dd($basket);
 
         $total = 0;
         foreach ($basket as $item) {
@@ -63,6 +62,16 @@ class OrdersController extends Controller
         }
         session()->put('basket', $basket);
         return redirect()->back();
+    }
+
+    public function removeFromBasket($id, Request $request)
+    {
+        $basket = session()->get('basket', []);
+        if (isset($basket[$id])) {
+            unset($basket[$id]);
+            session()->put('basket', $basket);
+        }
+        return redirect()->route('orders.createOrder', $request->supplier_id);
     }
 
     public function emptyBasket()
@@ -135,21 +144,22 @@ class OrdersController extends Controller
             $order_detail->quantity_received = $request->quantity_received[$i];
             $order_detail->price = $request->price[$i];
             $order_detail->total = $request->price[$i] * $request->quantity_received[$i];
-            $subtotal = +$request->price[$i] * $request->quantity_received[$i];
+            $subtotal =+ $request->price[$i] * $request->quantity_received[$i];
             $order_detail->save();
 
             $product = Products::find($request->product_id[$i]);
             $product->quantity += $request->quantity_received[$i];
+            $product->productBuyingPrice = $request->price[$i];
             $product->save();
         }
-        $received_order->total = $subtotal;
+        $received_order->total = $request->subtotal;
         $received_order->save();
 
         $supplier_account = new SupplierAccounts();
         $supplier_account->supplier_id = $received_order->supplier_id;
         $supplier_account->transaction_id = $received_order->orderCode;
         $supplier_account->transaction_type = 1;
-        $supplier_account->amount = $subtotal;
+        $supplier_account->amount = $request->subtotal;
         $supplier_account->save();
 
         return redirect()->route('orders.index');

@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::resource('/home', HomeController::class);
 
 // PRODUCTS ROUTE
 Route::resource('/products', ProductsController::class);
@@ -40,6 +40,7 @@ Route::get('/sales/receipt/{id}', [SalesController::class, 'printReceipt'])->nam
 // CUSTOMERS ROUTE
 Route::resource('/customers', CustomersController::class);
 Route::get('/customers/show-customer-details/{id}', [CustomersController::class, 'showCustomerInfo'])->name('customers.show-customer-details');
+Route::get('/customers/{id}/balance', [CustomersController::class, 'balance'])->name('customers.balance');
 Route::post('/customers/transactions', [CustomersController::class, 'transactions'])->name('customers.transactions');
 
 
@@ -52,6 +53,7 @@ Route::post('/suppliers/transaction', [SuppliersController::class, 'transaction'
 Route::resource('/orders', OrdersController::class);
 Route::get('/orders/create-order/{id}', [OrdersController::class, 'createOrder'])->name('orders.createOrder');
 Route::post('/orders/add-to-basket', [OrdersController::class, 'addToBasket'])->name('orders.add-to-basket');
+Route::delete('/orders/remove-from-basket/{id}', [OrdersController::class, 'removeFromBasket'])->name('orders.remove-from-basket');
 Route::delete('/orders/basket/empty', [OrdersController::class, 'emptyBasket'])->name('orders.empty-basket');
 Route::post('/orders/basket/purchase', [OrdersController::class, 'purchase'])->name('orders.purchase');
 

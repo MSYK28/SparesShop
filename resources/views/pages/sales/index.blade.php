@@ -22,12 +22,14 @@
                 <div class="card ms-5">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title">Sales on <span class="text-body supplier_name">{{ date('F d, Y', strtotime($today)) }}</span></h5>
-                        <a href="{{ route('home') }}" class="btn btn-sm m-2 btn-primary">New Sale</a>
+                        <a href="{{ route('home.index') }}" class="btn btn-sm m-2 btn-primary">New Sale</a>
                     </div>
                     <div class="card-body">
                         <table id="products-table" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th>#</th>
+                                    <th>Sale Time</th>
                                     <th>Sale Code</th>
                                     <th>Sale Type</th>
                                     <th>Customer</th>
@@ -39,6 +41,8 @@
                             <tbody>
                                 @foreach ($today_sales as $sale)
                                     <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $sale->created_at }}</td>
                                         <td>{{ $sale->sale_code }}</td>
                                         <td>
                                             @if ($sale->saleType == 0)

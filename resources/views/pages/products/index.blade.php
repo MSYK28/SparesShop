@@ -45,12 +45,12 @@
                         <table id="products-table" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Barcode</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
+                                    <th style="width: 80;">#</th>
+                                    <th style="width: 254px;">Name</th>
+                                    <th style="width: 254px;">Barcode</th>
+                                    <th style="width: 110;">Quantity</th>
+                                    <th style="width: 110;">Price</th>
+                                    <th style="width: 110;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>

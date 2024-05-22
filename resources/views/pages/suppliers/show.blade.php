@@ -115,16 +115,18 @@
                                             id="products-table">
                                             <thead>
                                                 <tr>
-                                                    <th>Order ID</th>
-                                                    <th>Order Date</th>
-                                                    <th>Total</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
+                                                    <th style="width: 30px;">#</th>
+                                                    <th style="width: 310px;">Order ID</th>
+                                                    <th style="width: 170px;">Order Date</th>
+                                                    <th style="width: 120px;">Total</th>
+                                                    <th style="width: 12px;">Status</th>
+                                                    <th style="width: 80px;">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($orders as $order)
                                                     <tr>
+                                                        <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $order->orderCode }}</td>
                                                         <td>{{ date('F d, Y', strtotime($order->created_at)) }}</td>
                                                         <td>{{ number_format($order->total, 2) }}</td>
@@ -159,17 +161,23 @@
                                             id="products-table">
                                             <thead>
                                                 <tr>
-                                                    <th>Transaction ID</th>
-                                                    <th>Transaction Type</th>
-                                                    <th>Date</th>
-                                                    <th>Total</th>
-                                                    <th>Action</th>
+                                                    <th style="width: 30px;">#</th>
+                                                    <th style="width: 290px;">Transaction ID</th>
+                                                    <th style="width: 150px;">Transaction Type</th>
+                                                    <th style="width: 140px;">Date</th>
+                                                    <th style="width: 140px;">Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($accounts as $account)
                                                     <tr>
-                                                        <td>{{ $account->transaction_id }}</td>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>
+                                                            @if ($account->transaction_type == 1)
+                                                                {{ $account->transaction_id }}</td>
+                                                            @else
+                                                                {{ $account->cheque_number }}</td>
+                                                            @endif
                                                         <td>
                                                             @if ($account->transaction_type == 1)
                                                                 <span class="badge bg-primary">Invoice</span>
@@ -179,11 +187,6 @@
                                                         </td>
                                                         <td>{{ date('F d, Y', strtotime($account->created_at)) }}</td>
                                                         <td>{{ number_format($account->amount, 2) }}</td>
-                                                        <td>
-                                                            <a href="{{ route('orders.show', $order->id) }}"
-                                                                class="btn btn-sm btn-info mr-2"><i
-                                                                    class="fas fa-edit"></i> View</a>
-                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -223,12 +226,13 @@
                         <h3>Make Transaction</h3>
                         <p>Fill form to make a transaction.</p>
                     </div>
-                    <form id="addCustomerForm" class="row g-3" action="{{ route('suppliers.transact') }}" method="POST">
+                    <form id="paySupplierForm" class="row g-3" action="{{ route('suppliers.transact') }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-sm-6">
                                 <label for="" class="form-label">Cheque Number</label>
-                                <input type="text" class="form-control" name="cheque_number" required id="cheque_number">
+                                <input type="text" class="form-control" name="cheque_number" required id="cheque_number"
+                                placeholder="01100 4000 5000">
                             </div>
                             <div class="col-sm-6">
                                 <label for="" class="form-label">Amount</label>
@@ -237,6 +241,7 @@
                             </div>
                         </div>
                         <div class="col-12 text-center mt-3">
+                            <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                             <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal"
                                 aria-label="Close">Cancel</button>
                             <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>

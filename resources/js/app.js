@@ -262,22 +262,53 @@ $(document).ready(function () {
 });
 
 // REMOVE ITEM FROM CART
+// Get the remove-from-cart-button element
 $(document).ready(function () {
     $('#remove-from-cart-button').on('click', function (e) {
+        const product_id = document.getElementById('productId').value;
+
         e.preventDefault();
-        $.ajax({
-            url: '/products/remove-from-cart/' + product_id,
-            method: 'POST',
-            data: $(this).serialize(),
-            success: function (response) {
-                window.location.href = '/home';
-                alert('Removed from cart');
-                // Reload the cart page or update the cart count
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseJSON.errors);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will remove the item from cart.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove item!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/products/remove-from-cart/' + product_id,
+                    type: 'DELETE',
+                    data: {
+                        _token: $('#token').val(),
+                        product_id: product_id,
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Item has been removed.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseJSON.errors);
+                    }
+                });
+                location.reload();
             }
-        });
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The item was not removed.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
     });
 });
 
@@ -297,7 +328,6 @@ $(document).ready(function () {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-
                 $.ajax({
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
@@ -314,6 +344,15 @@ $(document).ready(function () {
                     error: function (xhr, status, error) {
                         console.log(xhr.responseJSON.errors);
                     }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The cart was not emptied.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
                 });
             }
         })
@@ -585,54 +624,85 @@ $(document).ready(function () {
 // ADD DEBT PAYMENT
 $(document).ready(function () {
     $('#PaymentForm').on('submit', function (e) {
+        const customer_id = document.getElementById('customer_id').value;
+        const amount = document.getElementById('amount').value;
+        const mpesa_code = document.getElementById('mpesa_code').value;
         e.preventDefault();
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This will create a new transaction to the database.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, add transaction!',
-            cancelButtonText: 'No, cancel!',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                let customer_id =document.getElementById('customer_id').value;
 
-                $.ajax({
-                    url: $(this).attr('action'),
-                    method: $(this).attr('method'),
-                    data: $(this).serialize(),
-
-                    success: function (response) {
-                        Swal.fire({
-                            title: 'Success!',
-                            text: 'Transaction has been added.',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
+        $.ajax({
+            url: '/customers/' + customer_id + '/balance',
+            type: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    if (response.balance > amount) {
+                            Swal.fire({
+                            title: 'Are you sure?',
+                            text: 'This will create a new transaction to the database.',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, add transaction!',
+                            cancelButtonText: 'No, cancel!',
+                            reverseButtons: true
+                        }).then((result) => {
+                            if (result.isConfirmed) 
+                                {
+                                    $.ajax({
+                                        url: '/customers/transactions',
+                                        method: 'POST',
+                                        data: {
+                                            _token: $('#token').val(),
+                                            customer_id: customer_id,
+                                            amount: amount,
+                                            mpesa_code: mpesa_code,
+                                        },
+                            
+                                        success: function (response) {
+                                            Swal.fire({
+                                                title: 'Success!',
+                                                text: 'Transaction has been added.',
+                                                icon: 'success',
+                                                confirmButtonText: 'OK'
+                                            });
+                                            window.location.href ='/customers/show-customer-details/'  + customer_id;
+                                        },
+                                        error: function (xhr, status, error) {
+                                            // Display an error message
+                                            Swal.fire({
+                                                title: 'Error!',
+                                                text: 'An error occurred: ' + xhr.responseText,
+                                                icon: 'error',
+                                                confirmButtonText: 'OK'
+                                            });
+                                        }
+                                    });
+                                }
+                            else
+                                {
+                                    Swal.fire({
+                                        title: 'Cancelled',
+                                        text: 'The Customer was not added.',
+                                        icon: 'info',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
                         });
-                        window.location.href ='/customers/show-customer-details/'  + customer_id;
-                    },
-                    error: function (xhr, status, error) {
-                        // Display an error message
+                    }
+                    else
+                    {
                         Swal.fire({
-                            title: 'Error!',
-                            text: 'An error occurred: ' + xhr.responseText,
-                            icon: 'error',
+                            title: 'Cancelled',
+                            text: 'The amount entered is greater than balance.',
+                            icon: 'info',
                             confirmButtonText: 'OK'
                         });
                     }
-                });
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
             }
-            else
-            {
-                Swal.fire({
-                    title: 'Cancelled',
-                    text: 'The Customer was not added.',
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-            }
-        })
+        });
+
     })
 });
 // ADD DEBT PAYMENT !!!!
@@ -660,6 +730,9 @@ $('#supplier_id').on('change', function () {
     }
 });
 
+
+
+// PRODUCTS ORDERING
 // ADD PRODUCTS TO BASKET
 $(document).ready(function () {
     $('#add-to-basket-form').on('submit', function (e) {
@@ -691,6 +764,161 @@ $(document).ready(function () {
     });
 });
 
+// REMOVE ITEM FROM BASKET
+// Get the remove-from-basket-button element
+$(document).ready(function () {
+    $('#remove-from-basket-button').on('click', function (e) {
+        const product_id = document.getElementById('product_id').value;
+        const supplier_id = document.getElementById('supplier_id').value;
+
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will remove the item from basket.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove item!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/orders/remove-from-basket/' + product_id,
+                    type: 'DELETE',
+                    data: {
+                        _token: $('#token').val(),
+                        id: product_id,
+                        supplier_id: supplier_id,
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Item has been removed.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseJSON.errors);
+                    }
+                });
+                location.reload();
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The item was not removed.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    });
+});
+
+// EMPTY ENTIRE BASKET
+$(document).ready(function () {
+    $('#empty-basket-form').on('submit', function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will empty the basket.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, empty basket!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Basket has been emptied.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseJSON.errors);
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The basket was not emptied.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    });
+});
+
+
+//  CREATE ORDER 
+$(document).ready(function () {
+    $('#order-form').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will create a new order.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, create order!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // var supplier_id = document.getElementById('supplier_id').value;
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) { 
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Order has been created',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href ='/orders';
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The sale was not created.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    })
+});
+
+
 // GET ORDER PRICE AND QUANTITY
 const priceInputs = document.querySelectorAll('.order_quantity_received');
 const quantityInputs = document.querySelectorAll('.order_price');
@@ -708,6 +936,7 @@ quantityInputs.forEach((quantityInput, i) => {
     });
 });
 
+//  GET ORDER TOTAL
 function calculateTotal(priceElements, quantityElements) {
 
     let total = 0;
@@ -724,7 +953,119 @@ function calculateTotal(priceElements, quantityElements) {
         totals[i].innerText = item_total.toFixed(2);
         total += price * quantity;
     }
-
     document.getElementById('total').innerText = total.toFixed(2);
-    document.getElementById('subtotal').innerText = total.toFixed(2);
+    document.getElementById('subtotal').value = total;
+
 }
+
+// RECEIVE ORDERED GOODS
+$(document).ready(function () {
+    $('#receiveOrderForm').on('submit', function (e) {
+        var order_id = document.getElementById('order_id').value;
+        var subtotal = document.getElementById('subtotal').value;
+        var product_id = document.getElementById('product_id').value;
+
+        e.preventDefault();
+        console.log(order_id, subtotal, product_id);
+    
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will add a received products to the database.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Confirm Received Goods!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Order has been received.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The Customer was not added.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+});
+
+// PAY SUPPLIER/MAKE SUPPLIER TRANSACTION
+$(document).ready(function () {
+    $('#paySupplierForm').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will make a new transaction to the supplier.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, make transaction!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var supplier_id = document.getElementById('supplier_id').value;
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Transaction has been done.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href ='/suppliers/' + supplier_id;
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+            else
+            {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The Customer was not added.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    })
+});

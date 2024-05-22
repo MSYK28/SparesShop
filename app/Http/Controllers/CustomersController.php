@@ -70,24 +70,33 @@ class CustomersController extends Controller
         return view('pages.customers.show', compact('customer', 'sales', 'total', 'transactions', 'balance'));
     }
 
+    public function balance($id)
+    {
+        // $id = $request->customer_id;
+        $balance = 0;
+        $transaction = CustomerTransactions::where('customer_id', $id)->sum('amount');
+        $sales = Sales::where('customer_id', $id)->where('saleType', 2)->sum('total');
+        $balance =  $sales - $transaction;
+
+        return response()->json([
+            'success' => true,
+            'balance' => $balance,
+        ]);
+        
+    }
+
     public function transactions(Request $request)
     {
         $id = $request->customer_id;
         $amount = $request->amount;
-        $balance = CustomerTransactions::where('customer_id', $id)->sum('amount');
 
-        if ($amount >= $balance) {
-            $transactions = new CustomerTransactions();
-            $transactions->customer_id = $id;
-            $transactions->mpesa_code = $request->mpesa_code;
-            $transactions->amount = $amount;
-            $transactions->save();
-            return redirect()->back();
-        } 
-        else 
-        {
-            return redirect()->back()->with('error', 'Amount is greater than balance');
-        }
+        $transactions = new CustomerTransactions();
+        $transactions->customer_id = $id;
+        $transactions->mpesa_code = $request->mpesa_code;
+        $transactions->amount = $amount;
+        $transactions->save();
+        return redirect()->back();
+        
     }
     
     

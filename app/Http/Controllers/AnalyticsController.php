@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Analytics;
 use App\Models\CustomerTransactions;
 use App\Models\Sales;
+use App\Models\SalesRevenue;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,24 +42,27 @@ class AnalyticsController extends Controller
      */
     public function create()
     {
+        // TODAY SALES
         $today = Carbon::today();
         $total_sales = Sales::whereDate('created_at', $today)->sum('total');
         $cash_sales = Sales::whereDate('created_at', $today)->where('saleType', 1)->sum('total');
+        $revenue = SalesRevenue::whereDate('created_at', $today)->where('saleType', 1)->sum('amount');
 
+        // ALL SALES 
         $all_credit_sales = Sales::where('saleType', 2)->sum('total');
         $all_cash_sales = Sales::where('saleType', 1)->sum('total');
         $all_credit_paid = CustomerTransactions::sum('amount');
         $owed = $all_credit_sales - $all_credit_paid;
 
+
+        // MONTHLY SALES
         $monthlySales = DB::table('fratij_sales')
             ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(total) as total_sales')
             ->whereBetween('created_at', ['2024-05-01', '2024-05-31'])
             ->groupBy('month')
             ->orderBy('month')
             ->get();
-            // dd($monthlySales);
         $totalSales = $monthlySales->sum('total_sales');
-        // dd($totalSales);
 
         $cashSales = DB::table('fratij_sales')
             ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(total) as total_sales')
@@ -69,8 +73,7 @@ class AnalyticsController extends Controller
             ->get();
         $totalCashSales = $cashSales->sum('total_sales');
         
-        // dd($cashSales);
-        return view('pages.analytics.create', compact('today', 'total_sales', 'cash_sales', 'all_credit_sales', 'all_credit_paid', 'owed', 'monthlySales', 'cashSales', 'totalSales', 'totalCashSales'));
+        return view('pages.analytics.create', compact('today', 'total_sales', 'cash_sales', 'revenue', 'all_credit_sales', 'all_credit_paid', 'owed', 'monthlySales', 'cashSales', 'totalSales', 'totalCashSales'));
     }
 
     /**
