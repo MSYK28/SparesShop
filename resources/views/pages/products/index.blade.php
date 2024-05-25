@@ -30,11 +30,12 @@
                             </div>
                             <button type="submit" class="btn btn-sm btn-primary mt-2">Import Products</button>
                         </form>
-                        <form action="{{ route('products.import-csv') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('products.import-csv') }}" method="POST" id="import-csv-form" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="file" class="form-label">Import CSV</label>
                                 <input type="file" name="file" class="form-control-file form-control" id="file" required>
+                                <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                             </div>
                             <button type="submit" class="btn btn-sm btn-primary mt-2">Import Products</button>
                         </form>

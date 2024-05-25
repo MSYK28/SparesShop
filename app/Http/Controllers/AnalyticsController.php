@@ -63,7 +63,6 @@ class AnalyticsController extends Controller
             ->orderBy('month')
             ->get();
         $totalSales = $monthlySales->sum('total_sales');
-
         $cashSales = DB::table('fratij_sales')
             ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(total) as total_sales')
             ->whereBetween('created_at', ['2024-05-01', '2024-05-31'])
@@ -72,8 +71,16 @@ class AnalyticsController extends Controller
             ->orderBy('month')
             ->get();
         $totalCashSales = $cashSales->sum('total_sales');
+        $monthlyRevenue = DB::table('fratij_sales_revenue')
+            ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(amount) as total_sales')
+            ->whereBetween('created_at', ['2024-05-01', '2024-05-31'])
+            ->where('saleType', 1)
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+        $totalMonthlyRevenue = $monthlyRevenue->sum('total_sales');
         
-        return view('pages.analytics.create', compact('today', 'total_sales', 'cash_sales', 'revenue', 'all_credit_sales', 'all_credit_paid', 'owed', 'monthlySales', 'cashSales', 'totalSales', 'totalCashSales'));
+        return view('pages.analytics.create', compact('today', 'total_sales', 'cash_sales', 'revenue', 'all_credit_sales', 'all_credit_paid', 'owed', 'monthlySales', 'cashSales', 'totalSales', 'totalCashSales', 'totalMonthlyRevenue'));
     }
 
     /**

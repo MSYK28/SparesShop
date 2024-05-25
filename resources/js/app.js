@@ -116,6 +116,64 @@ $(document).ready(function () {
     })
 });
 
+// IMPORTING THROUGH CSV
+
+$(document).ready(function () {
+    $('#import-csv').on('submit', function (e) {  
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will add new products to the database.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, add it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            // If the user confirms, send the AJAX request
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+                        // Reload the page to show the updated product list
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Products have been added.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href = '/products';
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });     
+            }
+            else {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The products were not added.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    })
+});
+
+// IMPORTING THROUGH CSV !!!
+
+
 // ADDING PRODUCT TO PRODUCTS LIST
 $(document).ready(function () {
     $('#product-form').on('submit', function (e) {

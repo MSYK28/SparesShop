@@ -14,7 +14,7 @@ class SalesRevenue extends Model
     protected $fillable = [
         'sale_id',
         'product_id',
-        'revenue',
+        'amount',
         'saleType',
     ];
 }

@@ -126,15 +126,16 @@ class SalesController extends Controller
     {
         $sales_details = SalesDetails::where('sale_id', $id)->get();
         foreach ($sales_details as $sales_detail) {
-            $sales_detail->delete();
             $product = Products::find($sales_detail->product_id);
             $product->quantity = $product->quantity + $sales_detail->quantity;
             $product->save();
+            $sales_detail->delete();
         }
-
+        $sales_revenue = SalesRevenue::where('sale_id', $id)->get();
+        foreach ($sales_revenue as $sales_revenue) {
+            $sales_revenue->delete();
+        }
         $sales = Sales::find($id);
         $sales->delete();
-
-        return redirect()->route('home');
     }
 }

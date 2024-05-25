@@ -135,7 +135,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="d-flex flex-column h-100">
-                                            <h2 class="font-weight-bolder mb-0 mt-2">Account Statistics</h2>
+                                            <h2 class="font-weight-bolder mb-0 mt-2">Monthly Account Statistics</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -219,9 +219,8 @@
                                             <div class="col-8">
                                                 <div class="numbers">
                                                     <p class="text-sm mb-0 text-capitalize font-weight-bold">Revenue</p>
-                                                    <h5 class="font-weight-bolder mb-0 mt-2">
-                                                        12345
-                                                        <span class="text-success text-sm font-weight-bolder">+5%</span>
+                                                    <h5 class="font-weight-bolder mb-0 mt-2"> Ksh. 
+                                                        {{ $totalMonthlyRevenue }}
                                                     </h5>
                                                 </div>
                                             </div>
