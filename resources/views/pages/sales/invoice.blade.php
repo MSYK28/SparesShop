@@ -19,7 +19,7 @@
                 <div
                     class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center my-3">
                     <div class="d-flex flex-column justify-content-center">
-                        <h5 class="mb-1 mt-3">Order #{{ $sale->id }} <span
+                        <h5 class="mb-1 mt-3">Sale #{{ $sale->id }} <span
                                 class="badge bg-label-success me-2 ms-2">Paid</span> <span class="badge bg-label-info">Ready
                                 to
                                 Pickup</span></h5>

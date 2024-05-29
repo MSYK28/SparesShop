@@ -68,7 +68,6 @@ $(document).ready(function () {
                 let bank_name = document.getElementById('bank_name').value;
                 let bank = document.getElementById('bank').value;
                 let bank_account = document.getElementById('bank_account').value;
-
                 $.ajax({
                     url: "/suppliers",
                     type: "POST",
@@ -90,7 +89,7 @@ $(document).ready(function () {
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        window.location.href ='/suppliers';
+                        window.location.href = '/suppliers';
                     },
                     error: function (xhr, status, error) {
                         // Display an error message
@@ -102,9 +101,7 @@ $(document).ready(function () {
                         });
                     }
                 });
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The supplier was not added.',
@@ -119,9 +116,8 @@ $(document).ready(function () {
 // IMPORTING THROUGH CSV
 
 $(document).ready(function () {
-    $('#import-csv').on('submit', function (e) {  
+    $('#import-csv').on('submit', function (e) {
         e.preventDefault();
-
         Swal.fire({
             title: 'Are you sure?',
             text: 'This will add new products to the database.',
@@ -137,7 +133,6 @@ $(document).ready(function () {
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
                     data: $(this).serialize(),
-
                     success: function (response) {
                         // Reload the page to show the updated product list
                         Swal.fire({
@@ -157,9 +152,8 @@ $(document).ready(function () {
                             confirmButtonText: 'OK'
                         });
                     }
-                });     
-            }
-            else {
+                });
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The products were not added.',
@@ -197,7 +191,6 @@ $(document).ready(function () {
                 let productBuyingPrice = document.getElementById('productBuyingPrice').value;
                 let productPrice = document.getElementById('productPrice').value;
                 let productDiscountedPrice = document.getElementById('productDiscountedPrice').value;
-
                 // Send an AJAX request to add the product
                 $.ajax({
                     url: '/products',
@@ -242,7 +235,6 @@ $(document).ready(function () {
                 });
             }
         });
-
     });
 });
 
@@ -262,7 +254,6 @@ $(document).ready(function () {
             // If the user confirms, send the AJAX request
             if (result.isConfirmed) {
                 let productTitle = document.getElementById('productTitle').value;
-
                 $.ajax({
                     url: "/products/" + $('#productId').val(),
                     method: "PUT",
@@ -280,8 +271,7 @@ $(document).ready(function () {
                         console.log(xhr.responseJSON.errors);
                     }
                 });
-            }
-            else {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The product was not edited.',
@@ -292,6 +282,28 @@ $(document).ready(function () {
         });
     });
 });
+
+// SHOW PRODUCTS
+$(document).ready(function () {
+    $('#showProductInfo').on('click', function (e) {
+        e.preventDefault();
+
+        $('#showCustomerDetails').modal('show');
+        $.ajax({
+            url: $(this).attr('action'),
+            method: $(this).attr('method'),
+            data: $(this).serialize(),
+            success: function (response) {
+                $('#showCustomerDetails .modal-body').html(response.html);
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseJSON.errors);
+            }
+        });
+
+    });
+});
+
 
 // ADD PRODUCTS TO CART
 $(document).ready(function () {
@@ -324,7 +336,6 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#remove-from-cart-button').on('click', function (e) {
         const product_id = document.getElementById('productId').value;
-
         e.preventDefault();
         Swal.fire({
             title: 'Are you sure?',
@@ -356,9 +367,7 @@ $(document).ready(function () {
                     }
                 });
                 location.reload();
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The item was not removed.',
@@ -375,7 +384,6 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#empty-cart-form').on('submit', function (e) {
         e.preventDefault();
-
         Swal.fire({
             title: 'Are you sure?',
             text: 'This will empty the cart.',
@@ -403,9 +411,7 @@ $(document).ready(function () {
                         console.log(xhr.responseJSON.errors);
                     }
                 });
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The cart was not emptied.',
@@ -436,15 +442,14 @@ $(document).ready(function () {
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
                     data: $(this).serialize(),
-
-                    success: function (response) { 
+                    success: function (response) {
                         Swal.fire({
                             title: 'Success!',
                             text: 'Sale has been created',
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        window.location.href ='/home';
+                        window.location.href = '/home';
                     },
                     error: function (xhr, status, error) {
                         // Display an error message
@@ -456,9 +461,7 @@ $(document).ready(function () {
                         });
                     }
                 });
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The sale was not created.',
@@ -486,12 +489,10 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 let sale_id = document.getElementById('sale_id');
-
                 $.ajax({
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
                     data: $(this).serialize(),
-
                     success: function (response) {
                         Swal.fire({
                             title: 'Success!',
@@ -511,9 +512,7 @@ $(document).ready(function () {
                         });
                     }
                 });
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The order was not deleted.',
@@ -570,9 +569,8 @@ $('#customer_id').on('change', function () {
 
 // COMPLETE SALE
 $(document).ready(function () {
-    $('#completeSale').on('submit', function (e){
+    $('#completeSale').on('submit', function (e) {
         e.preventDefault();
-
         Swal.fire({
             title: 'Are you sure?',
             text: 'This will complete the sale.',
@@ -588,7 +586,6 @@ $(document).ready(function () {
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
                     data: $(this).serialize(),
-
                     success: function (response) {
                         Swal.fire({
                             title: 'Success!',
@@ -608,8 +605,7 @@ $(document).ready(function () {
                         });
                     }
                 });
-            }
-            else {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The sale was not completed.',
@@ -638,12 +634,10 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 let customerName = document.getElementById('name').value;
-
                 $.ajax({
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
                     data: $(this).serialize(),
-
                     success: function (response) {
                         Swal.fire({
                             title: 'Success!',
@@ -651,7 +645,7 @@ $(document).ready(function () {
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        window.location.href ='/customers';
+                        window.location.href = '/customers';
                     },
                     error: function (xhr, status, error) {
                         // Display an error message
@@ -663,9 +657,7 @@ $(document).ready(function () {
                         });
                     }
                 });
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The Customer was not added.',
@@ -686,14 +678,13 @@ $(document).ready(function () {
         const amount = document.getElementById('amount').value;
         const mpesa_code = document.getElementById('mpesa_code').value;
         e.preventDefault();
-
         $.ajax({
             url: '/customers/' + customer_id + '/balance',
             type: 'GET',
             success: function (response) {
                 if (response.success) {
-                    if (response.balance > amount) {
-                            Swal.fire({
+                    if (response.balance >= amount) {
+                        Swal.fire({
                             title: 'Are you sure?',
                             text: 'This will create a new transaction to the database.',
                             icon: 'warning',
@@ -702,51 +693,45 @@ $(document).ready(function () {
                             cancelButtonText: 'No, cancel!',
                             reverseButtons: true
                         }).then((result) => {
-                            if (result.isConfirmed) 
-                                {
-                                    $.ajax({
-                                        url: '/customers/transactions',
-                                        method: 'POST',
-                                        data: {
-                                            _token: $('#token').val(),
-                                            customer_id: customer_id,
-                                            amount: amount,
-                                            mpesa_code: mpesa_code,
-                                        },
-                            
-                                        success: function (response) {
-                                            Swal.fire({
-                                                title: 'Success!',
-                                                text: 'Transaction has been added.',
-                                                icon: 'success',
-                                                confirmButtonText: 'OK'
-                                            });
-                                            window.location.href ='/customers/show-customer-details/'  + customer_id;
-                                        },
-                                        error: function (xhr, status, error) {
-                                            // Display an error message
-                                            Swal.fire({
-                                                title: 'Error!',
-                                                text: 'An error occurred: ' + xhr.responseText,
-                                                icon: 'error',
-                                                confirmButtonText: 'OK'
-                                            });
-                                        }
-                                    });
-                                }
-                            else
-                                {
-                                    Swal.fire({
-                                        title: 'Cancelled',
-                                        text: 'The Customer was not added.',
-                                        icon: 'info',
-                                        confirmButtonText: 'OK'
-                                    });
-                                }
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '/customers/transactions',
+                                    method: 'POST',
+                                    data: {
+                                        _token: $('#token').val(),
+                                        customer_id: customer_id,
+                                        amount: amount,
+                                        mpesa_code: mpesa_code,
+                                    },
+                                    success: function (response) {
+                                        Swal.fire({
+                                            title: 'Success!',
+                                            text: 'Transaction has been added.',
+                                            icon: 'success',
+                                            confirmButtonText: 'OK'
+                                        });
+                                        window.location.href = '/customers/show-customer-details/' + customer_id;
+                                    },
+                                    error: function (xhr, status, error) {
+                                        // Display an error message
+                                        Swal.fire({
+                                            title: 'Error!',
+                                            text: 'An error occurred: ' + xhr.responseText,
+                                            icon: 'error',
+                                            confirmButtonText: 'OK'
+                                        });
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Cancelled',
+                                    text: 'The transaction was not added.',
+                                    icon: 'info',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
                         });
-                    }
-                    else
-                    {
+                    } else {
                         Swal.fire({
                             title: 'Cancelled',
                             text: 'The amount entered is greater than balance.',
@@ -828,7 +813,6 @@ $(document).ready(function () {
     $('#remove-from-basket-button').on('click', function (e) {
         const product_id = document.getElementById('product_id').value;
         const supplier_id = document.getElementById('supplier_id').value;
-
         e.preventDefault();
         Swal.fire({
             title: 'Are you sure?',
@@ -861,9 +845,7 @@ $(document).ready(function () {
                     }
                 });
                 location.reload();
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The item was not removed.',
@@ -879,7 +861,6 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#empty-basket-form').on('submit', function (e) {
         e.preventDefault();
-
         Swal.fire({
             title: 'Are you sure?',
             text: 'This will empty the basket.',
@@ -907,9 +888,7 @@ $(document).ready(function () {
                         console.log(xhr.responseJSON.errors);
                     }
                 });
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The basket was not emptied.',
@@ -937,20 +916,19 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 // var supplier_id = document.getElementById('supplier_id').value;
-
                 $.ajax({
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
                     data: $(this).serialize(),
 
-                    success: function (response) { 
+                    success: function (response) {
                         Swal.fire({
                             title: 'Success!',
                             text: 'Order has been created',
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        window.location.href ='/orders';
+                        window.location.href = '/orders';
                     },
                     error: function (xhr, status, error) {
                         // Display an error message
@@ -962,9 +940,7 @@ $(document).ready(function () {
                         });
                     }
                 });
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The sale was not created.',
@@ -1025,7 +1001,7 @@ $(document).ready(function () {
 
         e.preventDefault();
         console.log(order_id, subtotal, product_id);
-    
+
         Swal.fire({
             title: 'Are you sure?',
             text: 'This will add a received products to the database.',
@@ -1060,9 +1036,7 @@ $(document).ready(function () {
                         });
                     }
                 });
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
                     text: 'The Customer was not added.',
@@ -1089,7 +1063,6 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 var supplier_id = document.getElementById('supplier_id').value;
-
                 $.ajax({
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
@@ -1102,7 +1075,7 @@ $(document).ready(function () {
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        window.location.href ='/suppliers/' + supplier_id;
+                        window.location.href = '/suppliers/' + supplier_id;
                     },
                     error: function (xhr, status, error) {
                         // Display an error message
@@ -1114,12 +1087,10 @@ $(document).ready(function () {
                         });
                     }
                 });
-            }
-            else
-            {
+            } else {
                 Swal.fire({
                     title: 'Cancelled',
-                    text: 'The Customer was not added.',
+                    text: 'The transaction failed. Please try again later.',
                     icon: 'info',
                     confirmButtonText: 'OK'
                 });

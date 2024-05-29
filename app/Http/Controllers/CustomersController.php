@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customers;
 use App\Models\CustomerTransactions;
 use App\Models\Sales;
+use App\Models\SalesRevenue;
 use Illuminate\Http\Request;
 
 class CustomersController extends Controller
@@ -19,7 +20,7 @@ class CustomersController extends Controller
     
     public function index()
     {
-        $customers = Customers::all();
+        $customers = Customers::where('status', 1)->get();
         return view('pages.customers.index', compact('customers'));
     }
 
@@ -75,8 +76,8 @@ class CustomersController extends Controller
         // $id = $request->customer_id;
         $balance = 0;
         $transaction = CustomerTransactions::where('customer_id', $id)->sum('amount');
-        $sales = Sales::where('customer_id', $id)->where('saleType', 2)->sum('total');
-        $balance =  $sales - $transaction;
+        $credit_sales = Sales::where('customer_id', $id)->where('saleType', 2)->sum('total');
+        $balance =  $credit_sales - $transaction;
 
         return response()->json([
             'success' => true,
@@ -95,6 +96,20 @@ class CustomersController extends Controller
         $transactions->mpesa_code = $request->mpesa_code;
         $transactions->amount = $amount;
         $transactions->save();
+
+        $transaction = CustomerTransactions::where('customer_id', $id)->sum('amount');
+        $credit_sales = Sales::where('customer_id', $id)->where('saleType', 2)->sum('total');
+        $balance =  $credit_sales - $transaction;
+
+        $revenue_updates = SalesRevenue::where('customer_id', $id)->where('saleType', 2)->get();
+
+        if ($balance == 0) {
+            foreach ($revenue_updates as $revenue_update) {
+                $revenue_update->saleType = 1;
+                $revenue_update->customer_id = 999;
+                $revenue_update->update();
+            }
+        }
         return redirect()->back();
         
     }

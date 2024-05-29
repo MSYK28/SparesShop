@@ -10,6 +10,8 @@ use App\Models\Suppliers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+use function Pest\Laravel\json;
+
 class OrdersController extends Controller
 {
     /**
@@ -30,7 +32,7 @@ class OrdersController extends Controller
     public function createOrder($id)
     {
         $supplier = Suppliers::find($id);
-        $products = Products::where('supplier', $id)->get();
+        $products = Products::where('supplier_id', $id)->get();
         $basket = session()->get('basket', []);
 
         $total = 0;
@@ -81,23 +83,16 @@ class OrdersController extends Controller
         return redirect()->back();
     }
 
-    // public function create()
-    // {
-    //     $suppliers = Suppliers::all();
-    //     $basket = session()->get('basket', []);
-    //     $total = 0;
-    //     foreach ($basket as $item) {
-    //         $total += $item['price'] * $item['quantity'];
-    //     }
-    //     response()->json(['total' => $total]);
-    //     return view('pages.orders.create', compact('suppliers', 'basket', 'total'));
-    // }
-
-    // public function getProductsBySupplier($id)
-    // {
-    //     $products = Products::where('supplier', $id)->get();
-    //     return response()->json($products);
-    // }
+    public function create()
+    {
+        $low_stocks = Products::all();
+        foreach ($low_stocks as $low_stock) {
+            if ($low_stock->quantity >= $low_stock->reorderQty) {
+                response()->json(['low_stocks' => $low_stocks]);
+                return view('pages.orders.create', compact('low_stocks'));
+            }
+        }
+    }
 
     public function purchase(Request $request)
     {

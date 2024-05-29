@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('fratij_sales_revenue', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sale_id');
+            $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('product_id');
             $table->foreign('sale_id')->references('id')->on('fratij_sales');
+            $table->foreign('customer_id')->references('id')->on('fratij_customers');
             $table->foreign('product_id')->references('id')->on('fratij_products');
-            $table->string('saleType');
+            $table->string('saleType');      //1: Cash, 2: Credit
             $table->string('amount');
             $table->timestamps();
         });

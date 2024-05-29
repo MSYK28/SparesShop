@@ -13,6 +13,7 @@ class SalesRevenue extends Model
 
     protected $fillable = [
         'sale_id',
+        'customer_id',
         'product_id',
         'amount',
         'saleType',

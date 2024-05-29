@@ -6,6 +6,7 @@ use App\Models\Analytics;
 use App\Models\CustomerTransactions;
 use App\Models\Sales;
 use App\Models\SalesRevenue;
+use App\Models\SupplierAccounts;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +81,15 @@ class AnalyticsController extends Controller
             ->get();
         $totalMonthlyRevenue = $monthlyRevenue->sum('total_sales');
         
-        return view('pages.analytics.create', compact('today', 'total_sales', 'cash_sales', 'revenue', 'all_credit_sales', 'all_credit_paid', 'owed', 'monthlySales', 'cashSales', 'totalSales', 'totalCashSales', 'totalMonthlyRevenue'));
+
+        // SUPPLIER STATISTICS
+        $total_invoice = SupplierAccounts::where('transaction_type', 1)->sum('amount');
+        $total_paid = SupplierAccounts::where('transaction_type', 2)->sum('amount');
+
+        return view('pages.analytics.create', compact('today', 'total_sales', 'cash_sales', 'revenue', 
+        'all_credit_sales', 'all_credit_paid', 'owed', 
+        'monthlySales', 'cashSales', 'totalSales', 'totalCashSales', 'totalMonthlyRevenue',
+        'total_invoice', 'total_paid'));
     }
 
     /**

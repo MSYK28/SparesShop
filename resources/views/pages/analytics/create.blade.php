@@ -110,7 +110,7 @@
                                                 <div class="numbers">
                                                     <p class="text-sm mb-0 text-capitalize font-weight-bold">Revenue</p>
                                                     <h5 class="font-weight-bolder mb-0 mt-2"> Ksh.
-                                                        {{ $revenue }}
+                                                        {{ number_format($revenue, 2) }}
                                                         <span class="text-success text-sm font-weight-bolder"></span>
                                                     </h5>
                                                 </div>
@@ -220,7 +220,7 @@
                                                 <div class="numbers">
                                                     <p class="text-sm mb-0 text-capitalize font-weight-bold">Revenue</p>
                                                     <h5 class="font-weight-bolder mb-0 mt-2"> Ksh. 
-                                                        {{ $totalMonthlyRevenue }}
+                                                        {{ number_format($totalMonthlyRevenue, 2) }}
                                                     </h5>
                                                 </div>
                                             </div>
@@ -322,15 +322,15 @@
                             </div>
                         </div>
                         <div class="row ms-5">
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div class="card  mb-4">
                                     <div class="card-body p-3">
                                         <div class="row">
                                             <div class="col-8">
                                                 <div class="numbers">
-                                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Sales</p>
+                                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Amount Owed</p>
                                                     <h5 class="font-weight-bolder mb-0 mt-2"> Ksh.
-                                                        {{ number_format($total_sales, 2) }}
+                                                        {{ number_format($total_invoice, 2) }}
                                                     </h5>
                                                 </div>
                                             </div>
@@ -345,15 +345,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div class="card ">
                                     <div class="card-body p-3">
                                         <div class="row">
                                             <div class="col-8">
                                                 <div class="numbers">
-                                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Cash</p>
+                                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Total Paid</p>
                                                     <h5 class="font-weight-bolder mb-0 mt-2">Ksh.
-                                                        {{ number_format($cash_sales, 2) }}
+                                                        {{ number_format($total_paid, 2) }}
                                                     </h5>
                                                 </div>
                                             </div>
@@ -367,15 +367,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div class="card  mb-4">
                                     <div class="card-body p-3">
                                         <div class="row">
                                             <div class="col-8">
                                                 <div class="numbers">
-                                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Credit</p>
+                                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Balance</p>
                                                     <h5 class="font-weight-bolder mb-0 mt-2">Ksh.
-                                                        {{ number_format($total_sales - $cash_sales, 2) }}
+                                                        {{ number_format($total_invoice - $total_paid, 2) }}
                                                     </h5>
                                                 </div>
                                             </div>
@@ -384,29 +384,6 @@
                                                     class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                                                     <i class="ni ni-paper-diploma text-lg opacity-10"
                                                         aria-hidden="true"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="card ">
-                                    <div class="card-body p-3">
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <div class="numbers">
-                                                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Revenue</p>
-                                                    <h5 class="font-weight-bolder mb-0 mt-2">
-                                                        $103,430
-                                                        <span class="text-success text-sm font-weight-bolder">+5%</span>
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                            <div class="col-4 text-end">
-                                                <div
-                                                    class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                                                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
                                                 </div>
                                             </div>
                                         </div>

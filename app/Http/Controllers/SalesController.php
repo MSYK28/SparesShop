@@ -41,7 +41,6 @@ class SalesController extends Controller
      */
     public function store(Request $request)
     {
-
         $valid = $request->validate([
             'sale_id' => 'required',
             'customer_sale_id' => 'required',
@@ -57,9 +56,10 @@ class SalesController extends Controller
 
         $revenue = SalesRevenue::where('sale_id', $id)->get();
         foreach ($revenue as $rev) {
-            $rev->update(['saleType' => $request->saleType]);
+            $rev->saleType = $request->saleType;
+            $rev->customer_id = $request->customer_sale_id;
+            $rev->update();
         }
-        // dd($revenue);
 
         return redirect()->route('sales.index');
     }

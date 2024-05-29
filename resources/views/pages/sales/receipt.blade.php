@@ -133,7 +133,7 @@
                             <a id="invoice_download_btn" class="btn btn-lg btn-download btn-theme">
                                 <i class="fa fa-download"></i> Download Invoice
                             </a>
-                            <a href="{{ route('home') }}" class="btn btn-lg btn-danger">
+                            <a href="{{ route('home.index') }}" class="btn btn-lg btn-danger">
                                 <i class="fa fa-download"></i> Dashbaord
                             </a>
                         </div>

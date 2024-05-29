@@ -138,7 +138,9 @@ class HomeController extends Controller
             $purchase = $item['quantity'] * $product['productBuyingPrice'];
 
             $sale_revenue = new SalesRevenue();
-            $sale_revenue->sale_id = $sale_id;
+            $sale_revenue->sale_id = $sale_id;  
+            $sale_revenue->SaleType = 0;  
+            $sale_revenue->customer_id = 1;
             $sale_revenue->product_id = $item['id'];;
             $sale_revenue->amount = $sale_detail->total - $purchase;
             $sale_revenue->save();

@@ -74,7 +74,7 @@ class ProductsController extends Controller
                     'productTitle' => $data[1],
                     'quantity' => intval($data[3]),
                     'reorderQty' => intval($data[4]),
-                    'supplier' => intval($data[0]),
+                    'supplier_id' => intval($data[0]),
                 ];
             }
             fclose($handle);
@@ -102,9 +102,11 @@ class ProductsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Products $products)
+    public function show(Products $products, $id)
     {
-        //
+        $product = Products::find($id);
+        $html = view('products.show', compact('product'))->render();
+        return response()->json(['html' => $html]);
     }
 
     /**

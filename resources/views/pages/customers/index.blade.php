@@ -64,7 +64,6 @@
 
 
     {{-- Add Customer Modal --}}
-
     <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-simple modal-edit-user">
             <div class="modal-content p-3 p-md-5">

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('fratij_customers');
             $table->string('total');
-            $table->string('saleType')->default(0);
+            $table->string('saleType')->default(0);    //1: Cash ,   2: Credit
             $table->string('status')->default(1);
             $table->timestamps();
         });
