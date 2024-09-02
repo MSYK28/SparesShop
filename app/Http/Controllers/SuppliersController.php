@@ -40,6 +40,7 @@ class SuppliersController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
+            'code' => 'required|string|max:255',
             'email' => 'string|email|max:255|unique:fratij_customers',
             'phone_number' => 'required|string|max:255|unique:fratij_customers',
             'bank' => 'required',
@@ -47,9 +48,10 @@ class SuppliersController extends Controller
             'bank_account' => 'required',
             'status' => 'required|string|max:255',
         ]);
-        // dd($validatedData);
+
         $supplier = new Suppliers();
         $supplier->name = $request->name;
+        $supplier->code = $request->code;
         $supplier->email = $request->email;
         $supplier->phone_number = $request->phone_number;
         $supplier->taxID = $request->taxID;

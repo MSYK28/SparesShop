@@ -55,6 +55,13 @@ class HomeController extends Controller
                 $cart[$productId]['quantity'] += $quantity;
             } else {
                 $product = Products::find($productId);
+                // $newItem = [
+                //     'id' => $productId,
+                //     'name' => $product->productTitle,
+                //     'quantity' => $quantity,
+                //     'price' => $price,
+                // ];
+                // $cart = array_merge([$productId => $newItem], $cart);
                 $cart[$productId] = [
                     'id' => $productId,
                     'name' => $product->productTitle,
@@ -82,6 +89,7 @@ class HomeController extends Controller
         $cart = session()->get('cart', []);
         if (isset($cart[$id])) {
             unset($cart[$id]);
+            // $cart = array_values($cart);
             session()->put('cart', $cart);
         }
         return redirect()->route('home.index');

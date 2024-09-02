@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('fratij_products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('supplier_id');
-            $table->foreign('supplier_id')->references('id')->on('fratij_suppliers');
+            $table->unsignedBigInteger('supplier');
+            $table->foreign('supplier')->references('id')->on('fratij_suppliers');
             $table->string('productTitle');
             $table->string('productBarcode');
             $table->integer('quantity');

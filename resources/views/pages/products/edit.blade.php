@@ -33,8 +33,8 @@
                                     <div class="col-md-8 p-2">
                                         <label for="" class="form-label">Select Supplier</label>
                                         <select name="supplier" id="supplier" class="form-select mySelect">
-                                            <option value="{{ $product->supplier->id }}" selected>{{ $product->supplier->name }}</option>
                                             @foreach ($suppliers as $supplier)
+                                                <option value="{{ $product->suppliers->id }}" selected>{{ $product->suppliers->name }}</option>
                                                 <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                                             @endforeach
                                         </select>

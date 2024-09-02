@@ -12,7 +12,7 @@ class Products extends Model
     protected $table = 'fratij_products';
 
     protected $fillable =[
-        'supplier_id',
+        'supplier',
         'productTitle',
         'productBarcode',
         'quantity',
@@ -22,8 +22,8 @@ class Products extends Model
         'productDiscountedPrice',
     ];
 
-    public function supplier()
+    public function suppliers()
     {
-        return $this->belongsTo(Suppliers::class, 'supplier_id', 'id');
+        return $this->belongsTo(Suppliers::class, 'supplier', 'id');
     }
 }

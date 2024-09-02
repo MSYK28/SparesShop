@@ -29,8 +29,15 @@
                 <div class="card ms-5">
                     <div class="card-header">
                         <div class="card-title">
-                            <h6>Products currently in Stock</h6>
-                            <p>Click '+' to add to cart</p>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h6>Products currently in Stock</h6>
+                                    <p>Click '+' to add to cart</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="{{ route('products.create') }}" class="btn btn-primary mt-2">Add New Product</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -111,8 +118,9 @@
                                         </td>
                                         <td>{{ $item['quantity'] * $item['price'] }}</td>
                                         <td>
-                                            <button type="submit" class="btn btn-danger remove-from-cart-button"
-                                                id="remove-from-cart-button"  data-id="{{ $item['id'] }}">Remove</button>
+                                            {{-- <a href="{{ route('products.remove-from-cart', $item['id']) }}" class="btn btn-danger">Remove from cart</a> --}}
+                                            <a type="submit" class="btn btn-danger remove-from-cart-button"
+                                                id="remove-from-cart-button"  data-id="{{ $item['id'] }}">Remove</a>
                                         </td>
                                     </tr>
                                     @endforeach

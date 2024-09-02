@@ -61,6 +61,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 let name = document.getElementById('name').value;
+                let code = document.getElementById('code').value;
                 let email = document.getElementById('email').value;
                 let status = document.getElementById('status').value;
                 let taxID = document.getElementById('taxID').value;
@@ -74,6 +75,7 @@ $(document).ready(function () {
                     data: {
                         _token: $('#token').val(),
                         name: name,
+                        code: code,
                         email: email,
                         status: status,
                         taxID: taxID,
@@ -1055,6 +1057,57 @@ $(document).ready(function () {
         Swal.fire({
             title: 'Are you sure?',
             text: 'This will make a new transaction to the supplier.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, make transaction!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var supplier_id = document.getElementById('supplier_id').value;
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Transaction has been done.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href = '/suppliers/' + supplier_id;
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The transaction failed. Please try again later.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    })
+});
+
+// FILTER SALES BY DATE
+$(document).ready(function () {
+    $('#filterForm').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will filter the sales by date.',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, make transaction!',

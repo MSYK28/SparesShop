@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Products;
+use App\Models\Profile;
 use App\Models\Suppliers;
 use App\Providers\ProductsImport;
 use Illuminate\Http\Request;
@@ -30,7 +31,8 @@ class ProductsController extends Controller
     public function create()
     {
         $suppliers = Suppliers::all();
-        return view('pages.products.create', compact('suppliers'));
+        $barcodes = Profile::all();
+        return view('pages.products.create', compact('suppliers', 'barcodes'));
     }
 
     /**
@@ -74,7 +76,7 @@ class ProductsController extends Controller
                     'productTitle' => $data[1],
                     'quantity' => intval($data[3]),
                     'reorderQty' => intval($data[4]),
-                    'supplier_id' => intval($data[0]),
+                    'supplier' => intval($data[0]),
                 ];
             }
             fclose($handle);

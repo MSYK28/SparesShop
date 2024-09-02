@@ -91,7 +91,7 @@
 
             <div class="bottom-content">
                 <li class="nav-link">
-                    <a href="" class="active-link">
+                    <a href="/profile" class="active-link">
                         <i class='bx bxs-face-mask icon'></i>
                         <span class="text nav-text">Profile</span>
                     </a>

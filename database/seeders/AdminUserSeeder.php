@@ -42,6 +42,7 @@ class AdminUserSeeder extends Seeder
         Suppliers::create(
             [
                 'name' => 'Car & General',
+                'code' => 'CG',
                 'email' => 'carandgeneral@gmail.com',
                 'phone_number' => '0700112233',
                 'taxID' => '12345678',
@@ -52,6 +53,7 @@ class AdminUserSeeder extends Seeder
             ],
             [
                 'name' => 'Gurjeet Kumar',
+                'code' => 'CG',
                 'email' => 'carandgeneral@gmail.com',
                 'phone_number' => '0700112234',
                 'taxID' => '12345678',
@@ -62,6 +64,7 @@ class AdminUserSeeder extends Seeder
             ],
             [
                 'name' => 'Nakuru Equipment Spares',
+                'code' => 'CG',
                 'email' => 'carandgeneral@gmail.com',
                 'phone_number' => '0700112235',
                 'taxID' => '12345678',
@@ -72,6 +75,7 @@ class AdminUserSeeder extends Seeder
             ],
             [
                 'name' => 'Tanga',
+                'code' => 'CG',
                 'email' => 'carandgeneral@gmail.com',
                 'phone_number' => '0700112236',
                 'taxID' => '12345678',

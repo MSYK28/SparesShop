@@ -30,9 +30,10 @@
                                 <tr>
                                     <th style="width: 30px;">#</th>
                                     <th style="width: 240px;">Name</th>
-                                    <th style="width: 160px;">Email</th>
-                                    <th style="width: 160px;">Tax ID</th>
-                                    <th style="width: 160px;">Phone Number</th>
+                                    <th style="width: 120px;">Code</th>
+                                    <th style="width: 120px;">Email</th>
+                                    <th style="width: 120px;">Tax ID</th>
+                                    <th style="width: 120px;">Phone Number</th>
                                     <th style="width: 80px;">Action</th>
                                 </tr>
                             </thead>
@@ -41,6 +42,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $supplier->name }}</td>
+                                        <td>{{ $supplier->code }}</td>
                                         <td>{{ $supplier->email }}</td>
                                         <td>{{ $supplier->taxID }}</td>
                                         <td>{{ $supplier->phone_number }}</td>
@@ -78,6 +80,10 @@
                         <div class="col-12 col-md-12 fv-plugins-icon-container">
                             <label class="form-label" for="name">Name</label>
                             <input type="text" id="name" name="name" class="form-control" placeholder="John Doe">
+                        </div>
+                        <div class="col-12 col-md-12 fv-plugins-icon-container">
+                            <label class="form-label" for="code">Code</label>
+                            <input type="text" id="code" name="code" class="form-control" placeholder="CG">
                         </div>
                         <div class="col-12 col-md-6">
                             <label class="form-label" for="email">Email</label>

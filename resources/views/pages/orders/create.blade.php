@@ -41,7 +41,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $low_stock->productTitle }}</td>
-                                    <td>{{ $low_stock->supplier->name }}</td>
+                                    <td>{{ $low_stock->suppliers->name }}</td>
                                     <td>{{ $low_stock->productBarcode }}</td>
                                     <td>{{ $low_stock->quantity }}</td>
                                     <td></td>

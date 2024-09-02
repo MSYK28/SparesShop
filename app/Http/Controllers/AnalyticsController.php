@@ -41,8 +41,14 @@ class AnalyticsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        if ($request->has('start_date') && $request->has('end_date')) {
+            $sales = $this->filter($request);
+            return view('pages.analytics.create', compact('sales'));
+        } else {
+            $sales = Sales::all();
+        }
         // TODAY SALES
         $today = Carbon::today();
         $total_sales = Sales::whereDate('created_at', $today)->sum('total');
@@ -55,18 +61,17 @@ class AnalyticsController extends Controller
         $all_credit_paid = CustomerTransactions::sum('amount');
         $owed = $all_credit_sales - $all_credit_paid;
 
-
         // MONTHLY SALES
         $monthlySales = DB::table('fratij_sales')
             ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(total) as total_sales')
-            ->whereBetween('created_at', ['2024-05-01', '2024-05-31'])
+            ->whereBetween('created_at', ['2024-09-01', '2024-09-30'])
             ->groupBy('month')
             ->orderBy('month')
             ->get();
         $totalSales = $monthlySales->sum('total_sales');
         $cashSales = DB::table('fratij_sales')
             ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(total) as total_sales')
-            ->whereBetween('created_at', ['2024-05-01', '2024-05-31'])
+            ->whereBetween('created_at', ['2024-09-01', '2024-09-30'])
             ->where('saleType', 1)
             ->groupBy('month')
             ->orderBy('month')
@@ -74,14 +79,13 @@ class AnalyticsController extends Controller
         $totalCashSales = $cashSales->sum('total_sales');
         $monthlyRevenue = DB::table('fratij_sales_revenue')
             ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(amount) as total_sales')
-            ->whereBetween('created_at', ['2024-05-01', '2024-05-31'])
+            ->whereBetween('created_at', ['2024-09-01', '2024-09-30'])
             ->where('saleType', 1)
             ->groupBy('month')
             ->orderBy('month')
             ->get();
         $totalMonthlyRevenue = $monthlyRevenue->sum('total_sales');
         
-
         // SUPPLIER STATISTICS
         $total_invoice = SupplierAccounts::where('transaction_type', 1)->sum('amount');
         $total_paid = SupplierAccounts::where('transaction_type', 2)->sum('amount');
@@ -89,12 +93,24 @@ class AnalyticsController extends Controller
         return view('pages.analytics.create', compact('today', 'total_sales', 'cash_sales', 'revenue', 
         'all_credit_sales', 'all_credit_paid', 'owed', 
         'monthlySales', 'cashSales', 'totalSales', 'totalCashSales', 'totalMonthlyRevenue',
-        'total_invoice', 'total_paid'));
+        'total_invoice', 'total_paid', 'sales'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
+
+    public function filter(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        
+        // Fetch sales data for the selected date range
+        $sales = Sales::whereBetween('created_at', [$startDate, $endDate])->get();        
+        // Return the filtered sales data to the view
+        return view('pages.analytics.create', compact('sales'));
+    }
+
     public function store(Request $request)
     {
         //

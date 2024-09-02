@@ -32,7 +32,7 @@ class OrdersController extends Controller
     public function createOrder($id)
     {
         $supplier = Suppliers::find($id);
-        $products = Products::where('supplier_id', $id)->get();
+        $products = Products::where('supplier', $id)->get();
         $basket = session()->get('basket', []);
 
         $total = 0;

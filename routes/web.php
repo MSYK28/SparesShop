@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\SuppliersController;
 use App\Models\Analytics;
@@ -60,6 +61,10 @@ Route::post('/orders/basket/purchase', [OrdersController::class, 'purchase'])->n
 Route::get('/orders/products/supplier/{id}', [OrdersController::class, 'getProductsBySupplier'])->name('orders.get-products');
 Route::get('/orders/products/below-reorder-level/{id}', [OrdersController::class, 'getProductsBelowReorderLevel'])->name('orders.products-below-reorder');
 
+// PROFILE ROUTE
+Route::resource('/profile', ProfileController::class);
+
 // ANALYTICS ROUTE
 Route::resource('/analytics', AnalyticsController::class)->middleware('auth');
 Route::post('/analytics/check-password', [AnalyticsController::class, 'checkPassword'])->name('analytics.check-password');
+Route::get('/analytics/filter', [AnalyticsController::class, 'filter'])->name('analytics.filter');
