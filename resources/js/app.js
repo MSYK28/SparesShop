@@ -36,6 +36,17 @@ $(document).ready(function () {
     });
 });
 
+$(document).ready(function () {
+    $('#consolidated-table').DataTable({
+        "paging": true, // Enable/Disable pagination
+        "lengthChange": true, // Enable/Disable changing the number of rows per page
+        "searching": true, // Enable/Disable search box
+        "ordering": true, // Enable/Disable column ordering
+        "info": true, // Enable/Disable the display of table information (top-left corner)
+        "autoWidth": true,
+    });
+});
+
 // SELECT 2
 $(document).ready(function () {
     $('.mySelect').select2({
@@ -1110,12 +1121,11 @@ $(document).ready(function () {
             text: 'This will filter the sales by date.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, make transaction!',
+            confirmButtonText: 'Yes, filter!',
             cancelButtonText: 'No, cancel!',
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                var supplier_id = document.getElementById('supplier_id').value;
                 $.ajax({
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
@@ -1124,11 +1134,11 @@ $(document).ready(function () {
                     success: function (response) {
                         Swal.fire({
                             title: 'Success!',
-                            text: 'Transaction has been done.',
+                            text: 'Filter Successful.',
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
-                        window.location.href = '/suppliers/' + supplier_id;
+                        window.location.href = '/analytics/create';
                     },
                     error: function (xhr, status, error) {
                         // Display an error message
@@ -1143,7 +1153,7 @@ $(document).ready(function () {
             } else {
                 Swal.fire({
                     title: 'Cancelled',
-                    text: 'The transaction failed. Please try again later.',
+                    text: 'The request failed. Please try again later.',
                     icon: 'info',
                     confirmButtonText: 'OK'
                 });
@@ -1151,3 +1161,57 @@ $(document).ready(function () {
         })
     })
 });
+
+
+// CONSOLIDATE SALES!!!
+$(document).ready(function () {
+    $('#salesConsolidation').on('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This will add a consolidate sales for the chosen date.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Consolidate!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let cash_sales = document.getElementById('cash_sales').value;
+                let credit_sales = document.getElementById('credit_sales').value;
+                let revenue = document.getElementById('revenue').value;
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: $(this).attr('method'),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Sales on have been consolidated',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        window.location.href = '/analytics/create';
+                    },
+                    error: function (xhr, status, error) {
+                        // Display an error message
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred: ' + xhr.responseText,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'The transaction was cancelled.',
+                    icon: 'info',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+    })
+});
+// CONSOLIDATE SALES!!!

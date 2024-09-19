@@ -68,3 +68,4 @@ Route::resource('/profile', ProfileController::class);
 Route::resource('/analytics', AnalyticsController::class)->middleware('auth');
 Route::post('/analytics/check-password', [AnalyticsController::class, 'checkPassword'])->name('analytics.check-password');
 Route::get('/analytics/filter', [AnalyticsController::class, 'filter'])->name('analytics.filter');
+Route::post('/analytics/daily', [AnalyticsController::class, 'storeDaily'])->name('analytics.daily');
